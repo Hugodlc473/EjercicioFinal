@@ -1,0 +1,159 @@
+table fact_sales
+	lineageTag: 7f7fffcb-e319-4ee0-9459-35d432db349a
+
+	column '€/L Flat File NSV'
+		dataType: double
+		lineageTag: c19abc24-f373-48ff-8993-247e3575bf1e
+		summarizeBy: sum
+		sourceColumn: €/L Flat File NSV
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'AOP NSV'
+		dataType: int64
+		formatString: 0
+		lineageTag: d981a4fb-d337-4be7-b57c-11da29fd49f6
+		summarizeBy: sum
+		sourceColumn: AOP NSV
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'IBP NSV'
+		dataType: int64
+		formatString: 0
+		lineageTag: 176b8ffb-f9e6-4f54-8621-0c055533a6c2
+		summarizeBy: sum
+		sourceColumn: IBP NSV
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Actual NSV'
+		dataType: int64
+		formatString: 0
+		lineageTag: c673cee6-ec59-4510-bc41-0b8bdf445c5e
+		summarizeBy: sum
+		sourceColumn: Actual NSV
+
+		annotation SummarizationSetBy = Automatic
+
+	column '€/L Flat File GP'
+		dataType: double
+		lineageTag: 1251d14f-75c0-4c23-9af4-e2408c4b9a9a
+		summarizeBy: sum
+		sourceColumn: €/L Flat File GP
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'AOP GP'
+		dataType: int64
+		formatString: 0
+		lineageTag: e3039002-b0e0-431d-9178-54b45edc6cea
+		summarizeBy: sum
+		sourceColumn: AOP GP
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'IBP GP'
+		dataType: int64
+		formatString: 0
+		lineageTag: 14bb3d26-badd-4285-b288-b2d0bacbcfb3
+		summarizeBy: sum
+		sourceColumn: IBP GP
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Actual GP'
+		dataType: int64
+		formatString: 0
+		lineageTag: c5d8815d-1bf6-4463-b7b0-3235576f4a30
+		summarizeBy: sum
+		sourceColumn: Actual GP
+
+		annotation SummarizationSetBy = Automatic
+
+	column '€/L Flat File GSV'
+		dataType: double
+		lineageTag: 5c557b32-b256-4854-88b6-6ca8b3a5b9a6
+		summarizeBy: sum
+		sourceColumn: €/L Flat File GSV
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'AOP GSV'
+		dataType: int64
+		formatString: 0
+		lineageTag: b9850f44-f0c8-447a-be2f-725eac20f9b3
+		summarizeBy: sum
+		sourceColumn: AOP GSV
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'IBP GSV'
+		dataType: int64
+		formatString: 0
+		lineageTag: 57ea6dda-303c-42d3-9744-5d56f7c4039a
+		summarizeBy: sum
+		sourceColumn: IBP GSV
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Actual GSV'
+		dataType: int64
+		formatString: 0
+		lineageTag: a21a0c29-3706-4ba6-a191-1f3f610779ae
+		summarizeBy: sum
+		sourceColumn: Actual GSV
+
+		annotation SummarizationSetBy = Automatic
+
+	column Clave_Compuesta
+		dataType: string
+		lineageTag: 05908f0d-e72e-45ef-85f6-1997e3e7d70b
+		summarizeBy: none
+		sourceColumn: Clave_Compuesta
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 0fb941b9-96b6-4875-9c4d-68b790aca3bc
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition fact_sales = m
+		mode: import
+		source =
+				let
+				    Origen = sourcefile,
+				    #"Tipo cambiado" = Table.TransformColumnTypes(Origen,{{"Calendar Month", Int64.Type}, {"Business L2", type text}, {"Business", type text}, {"Brand", type text}, {"Sub-Brand", type text}, {"Type+size", type text}, {"€/L Flat File NSV", type number}, {"AOP NSV", Int64.Type}, {"IBP NSV", Int64.Type}, {"Actual NSV", Int64.Type}, {"€/L Flat File GP", type number}, {"AOP GP", Int64.Type}, {"IBP GP", Int64.Type}, {"Actual GP", Int64.Type}, {"€/L Flat File GSV", type number}, {"AOP GSV", Int64.Type}, {"IBP GSV", Int64.Type}, {"Actual GSV", Int64.Type}}),
+				    #"Personalizada agregada" = Table.AddColumn(#"Tipo cambiado", "Date", each #date([Year],[Month],1)),
+				    #"Removed Columns" = Table.RemoveColumns(#"Personalizada agregada",{"Date"}),
+				    #"Merged Queries" = Table.NestedJoin(#"Removed Columns", {"Business L2", "Business", "Brand", "Sub-Brand", "Type+size"}, #"dim_products (Imp)", {"Business_L2", "Business", "Brand", "Sub_Brand", "Type_Size"}, "dim_products (Original)", JoinKind.LeftOuter),
+				    #"Expanded dim_products (Original)" = Table.ExpandTableColumn(#"Merged Queries", "dim_products (Original)", {"Clave_Compuesta"}, {"Clave_Compuesta"}),
+				    #"Removed Columns1" = Table.RemoveColumns(#"Expanded dim_products (Original)",{"Business L2", "Business", "Brand", "Sub-Brand", "Type+size"}),
+				    #"Added Custom" = Table.AddColumn(#"Removed Columns1", "Date", each [Calendar Month]*100+1),
+				    #"Removed Columns2" = Table.RemoveColumns(#"Added Custom",{"Date"}),
+				    #"Split Column by Position" = Table.SplitColumn(Table.TransformColumnTypes(#"Removed Columns2", {{"Calendar Month", type text}}, "es-ES"), "Calendar Month", Splitter.SplitTextByPositions({0, 4}, false), {"Calendar Month.1", "Calendar Month.2"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Split Column by Position",{{"Calendar Month.1", Int64.Type}, {"Calendar Month.2", Int64.Type}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Calendar Month.1", "Year"}, {"Calendar Month.2", "Month"}}),
+				    #"Added Custom1" = Table.AddColumn(#"Renamed Columns", "Date", each #date([Year],[Month],1)),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Added Custom1",{{"Date", type date}}),
+				    #"Removed Columns3" = Table.RemoveColumns(#"Changed Type1",{"Year", "Month"})
+				in
+				    #"Removed Columns3"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

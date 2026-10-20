@@ -1,0 +1,48 @@
+table Nivel_Producto
+	lineageTag: 36b3d236-7fc3-4507-8b38-e78601b59735
+
+	column Nivel_Producto
+		lineageTag: 443ad3c9-7917-41e3-8629-5ef22c019159
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Nivel_Producto Orden'
+
+		relatedColumnDetails
+			groupByColumn: 'Nivel_Producto Campos'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nivel_Producto Campos'
+		lineageTag: d0b3326e-07d7-4acd-a958-edeba1fbc25d
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Nivel_Producto Orden'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nivel_Producto Orden'
+		isHidden
+		formatString: 0
+		lineageTag: 90561fb8-a69e-4108-819c-5483cdde9226
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Nivel_Producto = calculated
+		mode: import
+		source =
+				{
+				    ("Brand", NAMEOF('dim_products'[Brand]), 0),
+				    ("Sub-Brand", NAMEOF('dim_products'[Sub_Brand]), 1),
+				    ("Type+size", NAMEOF('dim_products'[Type_Size]), 2)
+				}
+
+	annotation PBI_Id = 8c394d55df504375acedc145eb095e7d
+

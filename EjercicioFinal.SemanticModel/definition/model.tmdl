@@ -1,0 +1,32 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	valueFilterBehavior: independent
+	dataAccessOptions
+		fastCombine
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["sourcefile","fact_sales","dim_products (Imp)","dim_products"]
+
+annotation __TEdtr = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table fact_sales
+ref table 'dim_products (Imp)'
+ref table Medidas
+ref table Nivel_Producto
+ref table dim_calendar
+ref table dim_products
+
+ref role Rol_Juan
+ref role Rol_Pablo
+
+ref perspective Sales_Perspective
+
+ref cultureInfo es-ES
+

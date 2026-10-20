@@ -1,0 +1,87 @@
+table 'dim_products (Imp)'
+	isHidden
+	lineageTag: c415b9c5-2f52-4fb7-9c60-26fefb722517
+
+	column Business
+		dataType: string
+		isHidden
+		lineageTag: f5dc1b10-7f99-4075-9374-2b3868a093c4
+		summarizeBy: none
+		sourceColumn: Business
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: string
+		isHidden
+		lineageTag: 6f184393-342d-4994-8768-3d256907e71e
+		summarizeBy: none
+		sourceColumn: Brand
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Business_L2
+		dataType: string
+		isHidden
+		lineageTag: a0ef28ca-147e-467f-a747-5e75a9849f55
+		summarizeBy: none
+		sourceColumn: Business_L2
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sub_Brand
+		dataType: string
+		isHidden
+		lineageTag: c06e9649-00d7-4cbc-b3e9-3c9f027a4ef2
+		summarizeBy: none
+		sourceColumn: Sub_Brand
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type_Size
+		dataType: string
+		isHidden
+		lineageTag: 2918d165-f966-401a-9115-3185ceb4c5fa
+		summarizeBy: none
+		sourceColumn: Type_Size
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Clave_Compuesta
+		dataType: string
+		isHidden
+		lineageTag: 800d0ad3-e94a-498f-a21f-0aa40ae75bef
+		summarizeBy: none
+		sourceColumn: Clave_Compuesta
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'dim_products (Imp)' = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("localhost\SQLEXPRESS", "master"),
+				    #"Expanded Data" = Table.ExpandTableColumn(Origen, "Data", {"ProductKey", "Business_L2", "Business", "Brand", "Sub_Brand", "Type_Size", "Clave_Compuesta"}, {"ProductKey", "Business_L2", "Business", "Brand", "Sub_Brand", "Type_Size", "Clave_Compuesta"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Expanded Data",{"Name", "ProductKey", "Schema", "Item", "Kind"}),
+				    #"Filtered Rows" = Table.SelectRows(#"Removed Columns", each ([Business_L2] <> null))
+				in
+				    #"Filtered Rows"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

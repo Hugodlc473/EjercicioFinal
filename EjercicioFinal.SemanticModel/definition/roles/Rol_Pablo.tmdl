@@ -1,0 +1,9 @@
+role Rol_Pablo
+	modelPermission: read
+
+	tablePermission dim_products = dim_products[Business_L2]="Spain"
+
+	tablePermission fact_sales
+
+	annotation PBI_Id = daa0e22c0453435d88dfb6d4fc4fbe7f
+

@@ -1,0 +1,115 @@
+table Medidas
+	lineageTag: d3cf188b-eb28-4e46-8845-0cd6ee0680f2
+
+	measure 'Actual NSV' = SUM(fact_sales[Actual NSV])
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: d5b828a9-bdbf-4fe5-a3d3-e92d2ac5f3c5
+
+	measure 'AOP NSV' = SUM(fact_sales[AOP NSV])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: bd9fddb9-d6c2-4ebd-9019-8976ae4ec34f
+
+	measure 'IBP NSV' = SUM(fact_sales[IBP NSV])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 4ebf8185-15ac-40b4-bf1f-36b721f7656d
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Actual GP' = SUM(fact_sales[Actual GP])
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 33dcf644-8994-45bc-b686-10cd2dc5180a
+
+	measure 'Var % vs AOP' = DIVIDE([Actual NSV]-[AOP NSV],[AOP NSV],BLANK())
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: b66d36d7-dbb3-492b-89ae-a715fd7d755f
+
+	measure 'GP %' = DIVIDE([Actual GP],[Actual NSV],BLANK())
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 091308f7-c69d-4ebe-9a31-05c14c5d4457
+
+	measure 'LY NSV' =
+			
+			CALCULATE(
+			    [Actual NSV],
+			    SAMEPERIODLASTYEAR(dim_calendar[Date])
+			)
+		formatString: 0
+		lineageTag: b41ff137-969e-43ce-868e-a688faa6a051
+
+	measure 'Var % YoY' = DIVIDE([Actual NSV]-[LY NSV],[LY NSV],BLANK())
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 2de1f714-9d1c-4a3c-a2ff-0213ee1e4b5e
+
+	measure Titulo_Dinámico = ```
+			
+			VAR NivelSeleccionado = SELECTEDVALUE(Nivel_Producto[Nivel_Producto Campos])
+			RETURN
+			"Actual Net Sales Value by" & 
+			SWITCH(
+			    NivelSeleccionado, 
+			    "'dim_products'[Brand]", " Brand",
+			    "'dim_products'[Sub_Brand]", " Sub-Brand",
+			    "'dim_products'[Type_Size]", " Type+Size") 
+			```
+		lineageTag: a027662c-48ab-4bb2-8342-a1b374f19c7d
+
+	measure Precio_Medio_Litro_Ponderado = ```
+			
+			VAR TotalNSV = [Actual NSV]
+			VAR TotalLitros = 
+			    SUMX(
+			        fact_sales, 
+			        DIVIDE(fact_sales[Actual NSV],fact_sales[€/L Flat File NSV],0)
+			    )
+			    RETURN
+			        DIVIDE(TotalNSV,TotalLitros,0)
+			```
+		formatString: #,0.00\ "€";-#,0.00\ "€";#,0.00\ "€"
+		lineageTag: d878aae1-dacb-44a0-99c5-b093f77723b1
+
+	measure 'Total Litros' =
+			
+			SUMX(
+			    fact_sales,
+			    DIVIDE(fact_sales[Actual NSV], fact_sales[€/L Flat File NSV],0)
+			)
+		formatString: #,0
+		lineageTag: 72d60cf5-44e6-43f9-ae14-2002f0731dd8
+
+	measure 2_Titulo_Dinamico = ```
+			
+			VAR NivelSeleccionado = SELECTEDVALUE(Nivel_Producto[Nivel_Producto Campos])
+			RETURN
+			"Price vs Volume Positioning by" & 
+			SWITCH(
+			    NivelSeleccionado, 
+			    "'dim_products'[Brand]", " Brand",
+			    "'dim_products'[Sub-Brand]", " Sub-Brand",
+			    "'dim_products'[Type+size]", " Type+Size") 
+			```
+		lineageTag: 682eee1a-8be2-4995-ad1e-ec8860abb8e3
+
+	measure Texto_Dinamico_Estrategico =
+			
+			VAR SelectedBrand = SELECTEDVALUE('dim_products'[Brand], "all brands")
+			VAR TotalLitres = [Total Litros] / 1000000
+			VAR GrossProfit = [Actual GP] / 1000000
+			RETURN
+			"Executive summary for " & SelectedBrand & ": Records a cumulative volume of " & FORMAT(TotalLitres, "#,##0.0") & " million litres, generating a total Gross Profit bruto (Actual GP) of " & FORMAT(GrossProfit, "#,##0.0") & " million euros."
+		lineageTag: f4e6ac05-0ce4-46f9-9f3a-1e38fd2f7cda
+
+	column Value
+		formatString: 0
+		lineageTag: 187d0743-82be-490b-b710-b98b8aba6165
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = calculated
+		mode: import
+		source = {0}
+
+	annotation PBI_Id = 77ceacd95e61409e882a92e34c2c4ef8
+

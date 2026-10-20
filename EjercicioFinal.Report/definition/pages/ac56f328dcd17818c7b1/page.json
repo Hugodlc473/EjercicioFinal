@@ -1,0 +1,81 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "ac56f328dcd17818c7b1",
+  "displayName": "Brand Deep Dive Analysis",
+  "displayOption": "FitToPage",
+  "height": 1080,
+  "width": 1920,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "7a2b51f059b2d933ea31",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_products (Imp)"
+              }
+            },
+            "Property": "Brand"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Drillthrough"
+      }
+    ]
+  },
+  "pageBinding": {
+    "name": "f44476dd6ef453b85325",
+    "type": "Drillthrough",
+    "parameters": [
+      {
+        "name": "7261ff23afea8868a4e4",
+        "boundFilter": "7a2b51f059b2d933ea31",
+        "asAggregation": false,
+        "qnaSingleSelectRequired": false,
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_products (Imp)"
+              }
+            },
+            "Property": "Brand"
+          }
+        }
+      }
+    ]
+  },
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F4F5F7'"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    ],
+    "personalizeVisual": [
+      {
+        "properties": {
+          "perspectiveRef": {
+            "expr": {
+              "Literal": {
+                "Value": "''"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

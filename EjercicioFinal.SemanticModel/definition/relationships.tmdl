@@ -1,0 +1,8 @@
+relationship fe30de9e-c992-0ee5-c743-cc8b2815161f
+	fromColumn: fact_sales.Date
+	toColumn: dim_calendar.Date
+
+relationship 4aabb82e-6d8a-01e4-c616-5e5cc0ad8f40
+	fromColumn: fact_sales.Clave_Compuesta
+	toColumn: dim_products.Clave_Compuesta
+

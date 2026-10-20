@@ -1,0 +1,69 @@
+table dim_calendar
+	lineageTag: bd011b4a-76e0-483c-8fb1-5de13d06a1e4
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: dd/mm/yyyy
+		lineageTag: a6ea3a8b-8fa1-4aee-903b-f89154e2c990
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column Año
+		formatString: 0
+		lineageTag: f03a7433-7434-48bc-8ce8-5463b6aab6b4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Año]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes_num
+		formatString: 0
+		lineageTag: e4166a59-c875-4bf8-b09b-c45baf12193e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes_num]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes
+		lineageTag: 56c0e553-80a0-407a-a3c3-dca4882c273c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		lineageTag: 59d2c1b0-ef4f-41f1-afed-37ac328c2803
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Trimestre]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_calendar = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS(
+				    CALENDAR(
+				        MIN(fact_sales[Date]),
+				        MAX(fact_sales[Date])
+				    ),
+				    "Año", YEAR([Date]),
+				    "Mes_num", MONTH([Date]),
+				    "Mes", FORMAT([Date], "MMMM"),
+				    "Trimestre", "Q" & QUARTER([Date])
+				)
+
+	annotation PBI_Id = 9af8e27c4db749b08c2291585e9beff5
+

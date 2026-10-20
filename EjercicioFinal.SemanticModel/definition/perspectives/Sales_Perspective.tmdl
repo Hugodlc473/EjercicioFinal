@@ -1,0 +1,10 @@
+perspective Sales_Perspective
+
+	perspectiveTable dim_products
+
+		perspectiveColumn Brand
+
+	perspectiveTable fact_sales
+
+		perspectiveColumn 'Actual NSV'
+

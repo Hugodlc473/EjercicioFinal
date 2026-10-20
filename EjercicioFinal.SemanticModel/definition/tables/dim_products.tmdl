@@ -1,0 +1,83 @@
+table dim_products
+	lineageTag: a1444f80-1e38-4975-88e5-5cbeb9183e12
+
+	column ProductKey
+		dataType: int64
+		isNullable: false
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: c7ae0b5c-9713-417f-b61a-a22c282faaa7
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Business_L2
+		dataType: string
+		sourceProviderType: nvarchar(100)
+		lineageTag: 0be0247e-273b-473f-9beb-d248bb013c40
+		summarizeBy: none
+		sourceColumn: Business_L2
+
+		annotation SummarizationSetBy = Automatic
+
+	column Business
+		dataType: string
+		sourceProviderType: nvarchar(100)
+		lineageTag: e43771bb-d279-4730-b5a5-6171a83c1879
+		summarizeBy: none
+		sourceColumn: Business
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: string
+		sourceProviderType: nvarchar(100)
+		lineageTag: d824c462-4ba6-4ef5-a23c-bee0dc5fd8e2
+		summarizeBy: none
+		sourceColumn: Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sub_Brand
+		dataType: string
+		sourceProviderType: nvarchar(100)
+		lineageTag: 8ea69c59-c7a8-47e0-bddf-6381c73d5238
+		summarizeBy: none
+		sourceColumn: Sub_Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column Type_Size
+		dataType: string
+		sourceProviderType: nvarchar(100)
+		lineageTag: 47063e7e-7221-4d5a-8e83-c5df2ba13cc5
+		summarizeBy: none
+		sourceColumn: Type_Size
+
+		annotation SummarizationSetBy = Automatic
+
+	column Clave_Compuesta
+		dataType: string
+		sourceProviderType: nvarchar(500)
+		lineageTag: e66366dc-e86c-4419-8a47-8b2f98b26ea9
+		summarizeBy: none
+		sourceColumn: Clave_Compuesta
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_products = m
+		mode: directQuery
+		source =
+				let
+				    Source = Sql.Database("localhost\SQLEXPRESS", "master"),
+				    dbo_dim_products = Source{[Schema="dbo",Item="dim_products"]}[Data]
+				in
+				    dbo_dim_products
+
+	changedProperty = Name
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,14 @@
+expression sourcefile =
+		let
+		    Origen = Excel.Workbook(File.Contents("C:\Users\HugoDelaCalleCasasec\Downloads\Data.xlsx"), null, true),
+		    #"Ejemplo Flat File (2)_Sheet" = Origen{[Item="Ejemplo Flat File (2)",Kind="Sheet"]}[Data],
+		    #"Encabezados promovidos" = Table.PromoteHeaders(#"Ejemplo Flat File (2)_Sheet", [PromoteAllScalars=true]),
+		    #"Tipo cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos",{{"Calendar Month", Int64.Type}, {"Business L2", type text}, {"Business", type text}, {"Brand", type text}, {"Sub-Brand", type text}, {"Type+size", type text}, {"€/L Flat File NSV", type number}, {"AOP NSV", Int64.Type}, {"IBP NSV", Int64.Type}, {"Actual NSV", Int64.Type}, {"€/L Flat File GP", type number}, {"AOP GP", Int64.Type}, {"IBP GP", Int64.Type}, {"Actual GP", Int64.Type}, {"€/L Flat File GSV", type number}, {"AOP GSV", Int64.Type}, {"IBP GSV", Int64.Type}, {"Actual GSV", Int64.Type}})
+		in
+		    #"Tipo cambiado"
+	lineageTag: 2811fa89-51bb-4dd6-926f-eb353fe4d7d7
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+
