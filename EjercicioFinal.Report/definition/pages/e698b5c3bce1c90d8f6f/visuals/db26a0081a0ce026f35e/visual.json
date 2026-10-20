@@ -27,8 +27,8 @@
                 }
               },
               "queryRef": "Medidas.Precio_Medio_Litro_Ponderado",
-              "nativeQueryRef": "Weighted Avg. €/L",
-              "displayName": "Weighted Avg. €/L"
+              "nativeQueryRef": "Weight. Avg. €/L",
+              "displayName": "Weight. Avg. €/L"
             }
           ]
         }
