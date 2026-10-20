@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "5b21a06e6adf1ca829a2",
   "position": {
     "x": 695.71416606643322,
@@ -19,24 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "EXECUTIVE SALES",
-                    "textStyle": {
-                      "fontWeight": "bold",
-                      "fontFamily": "DIN",
-                      "fontSize": "28pt",
-                      "color": "#ffffff"
-                    }
-                  },
-                  {
-                    "value": " ",
-                    "textStyle": {
-                      "fontFamily": "DIN",
-                      "fontSize": "28pt",
-                      "color": "#ffffff"
-                    }
-                  },
-                  {
-                    "value": "DASHBOARD",
+                    "value": "SALES EXECUTIVE DASHBOARD",
                     "textStyle": {
                       "fontWeight": "bold",
                       "fontFamily": "DIN",
